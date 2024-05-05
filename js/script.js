@@ -9,6 +9,10 @@ const gameBoard = (function () {
         return board;
     }
 
+    const placePiece = function(row, column, playerTurn) {
+        board[row][column] = playerTurn;
+    }
+
     const checkGameWin = function() {
         for(let i = 0; i <= 2; i++) {
             //row win
@@ -47,7 +51,7 @@ const gameBoard = (function () {
         ]; 
     }
 
-    return { getBoard, checkGameOver, checkGameWin, resetGameBoard };
+    return { getBoard, placePiece, checkGameOver, checkGameWin, resetGameBoard };
 })();
 
 function createPlayer(playerPiece) {
@@ -70,6 +74,21 @@ const gameController = (function() {
         roundCount = 1;
         playerTurn = 'x';
     }
+    const placePiece = function (row, column) {
+        gameBoard.placePiece(row, column, playerTurn);
+    }
+
+    const gameBoardDiv = document.querySelector('#game-board');
+
+    gameBoardDiv.addEventListener("click", (event) => {
+        if (event.target.className === "board-slot") {
+            const row = event.target.id[0];
+            const column = event.target.id[1];
+            placePiece(row, column);
+            togglePlayerTurn();
+            console.log(gameBoard.getBoard());
+        }
+    })
 
     return { getRoundCount, incrementRoundCount, 
         getPlayerTurn, togglePlayerTurn, reset }
@@ -87,15 +106,3 @@ function playGame() {
 
     console.log( gameBoard.getBoard() );
 }
-
-console.log( gameBoard.getBoard() );
-   
-
-const gameBoardDiv = document.querySelector('#game-board');
-
-gameBoardDiv.addEventListener("click", (event) => {
-    if (event.target.className === "board-slot") {
-        console.log(event.target.id);
-    }
-})
-console.log(gameBoardDiv);
