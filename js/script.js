@@ -5,6 +5,10 @@ const gameBoard = (function () {
         ['b', 'b', 'b']  //row 2
     ];
 
+    const getBoard = function() {
+        return board;
+    }
+
     const checkGameWin = function() {
         for(let i = 0; i <= 2; i++) {
             //row win
@@ -43,9 +47,45 @@ const gameBoard = (function () {
         ]; 
     }
 
-    return { checkGameOver, checkGameWin, resetGameBoard };
+    return { getBoard, checkGameOver, checkGameWin, resetGameBoard };
 })();
 
-console.log( gameBoard.checkGameWin() );
+function createPlayer(playerPiece) {
+
+
+    return { playerPiece }
+}
+
+const gameController = (function() {
+    let roundCount = 1;
+    let playerTurn = 'x';
+
+    const getRoundCount = () => roundCount;
+    const incrementRoundCount = () => roundCount++;
+    const getPlayerTurn = () => playerTurn;
+    const togglePlayerTurn = function () {
+        playerTurn = playerTurn === 'x' ? 'o' : 'x';
+    }
+    const reset = function () {
+        roundCount = 1;
+        playerTurn = 'x';
+    }
+
+    return { getRoundCount, incrementRoundCount, 
+        getPlayerTurn, togglePlayerTurn, reset }
+})();
+
+function playRound() {
+    
+}
+
+function playGame() {
+    let player1 = createPlayer('x');
+    let player2 = createPlayer('o');
+
+    console.log( gameBoard.getBoard() );
+}
+
+console.log( gameBoard.getBoard() );
    
 
