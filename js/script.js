@@ -75,8 +75,10 @@ const gameController = (function() {
         getPlayerTurn, togglePlayerTurn, reset }
 })();
 
+
+
 function playRound() {
-    
+
 }
 
 function playGame() {
@@ -89,3 +91,11 @@ function playGame() {
 console.log( gameBoard.getBoard() );
    
 
+const gameBoardDiv = document.querySelector('#game-board');
+
+gameBoardDiv.addEventListener("click", (event) => {
+    if (event.target.className === "board-slot") {
+        console.log(event.target.id);
+    }
+})
+console.log(gameBoardDiv);
