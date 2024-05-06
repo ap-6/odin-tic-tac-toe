@@ -25,6 +25,10 @@ body {
 
 .board-slot {
     background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
 }
 
 .board-slot:hover {

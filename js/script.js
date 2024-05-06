@@ -3,11 +3,15 @@ const gameBoard = (function () {
         ['b', 'b', 'b'], //row 0
         ['b', 'b', 'b'], //row 1
         ['b', 'b', 'b']  //row 2
-    ];
+    ]; //'b' for blank
 
     const getBoard = function() {
         return board;
     }
+
+    const checkIfBlank = function (row, column) {
+        return board[row][column] === 'b';
+    } 
 
     const placePiece = function(row, column, playerTurn) {
         board[row][column] = playerTurn;
@@ -38,9 +42,9 @@ const gameBoard = (function () {
     }
 
     const checkGameOver = function() {
-        return !(board[0].includes("b") || 
-                board[1].includes("b") || 
-                board[2].includes("b"));
+        return !(board[0].includes('b') || 
+                board[1].includes('b') || 
+                board[2].includes('b'));
     }
 
     const resetGameBoard = function() {
@@ -51,7 +55,8 @@ const gameBoard = (function () {
         ]; 
     }
 
-    return { getBoard, placePiece, checkGameOver, checkGameWin, resetGameBoard };
+    return { getBoard, placePiece, checkGameOver, checkGameWin, 
+        resetGameBoard, checkIfBlank };
 })();
 
 function createPlayer(playerPiece) {
@@ -74,19 +79,22 @@ const gameController = (function() {
         roundCount = 1;
         playerTurn = 'x';
     }
-    const placePiece = function (row, column) {
-        gameBoard.placePiece(row, column, playerTurn);
-    }
 
     const gameBoardDiv = document.querySelector('#game-board');
 
-    gameBoardDiv.addEventListener("click", (event) => {
-        if (event.target.className === "board-slot") {
-            const row = event.target.id[0];
-            const column = event.target.id[1];
-            placePiece(row, column);
-            togglePlayerTurn();
-            console.log(gameBoard.getBoard());
+    gameBoardDiv.addEventListener('click', (event) => {
+        if (event.target.className === 'board-slot') {
+            const boardSpace = event.target;
+            const row = boardSpace.id[0];
+            const column = boardSpace.id[1];
+            
+            if (gameBoard.checkIfBlank(row, column)) {
+                gameBoard.placePiece(row, column, playerTurn);
+                boardSpace.textContent = playerTurn;
+                togglePlayerTurn();
+            }
+
+
         }
     })
 
@@ -94,7 +102,9 @@ const gameController = (function() {
         getPlayerTurn, togglePlayerTurn, reset }
 })();
 
+const displayController = (function () {
 
+})();
 
 function playRound() {
 
