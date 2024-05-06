@@ -2,12 +2,16 @@ body,
 html {
     width: 100%;
     height: 100%;
+    font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
+    font-size: 30px;
 }
 
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 20px;
     background-color: rgb(12, 12, 12);
 }
 
@@ -33,4 +37,8 @@ body {
 
 .board-slot:hover {
     background-color: blue;
+}
+
+.announcements {
+    color: white;
 }

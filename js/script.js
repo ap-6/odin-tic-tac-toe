@@ -18,27 +18,33 @@ const gameBoard = (function () {
     }
 
     const checkGameWin = function() {
-        for(let i = 0; i <= 2; i++) {
+        for(let i = 0; i <= 2; i++) { //check each row and column
             //row win
-            if (board[i][0] === board[i][1] === board[i][2] &&
-                board[i][0] !== "b") { 
+            if (board[i][0] === board[i][1] && 
+                board[i][1] === board[i][2] &&
+                !checkIfBlank(i, 0)) { 
                 return true;
             }
             //column win
-            else if (board[0][i] === board[1][i] === board[2][i] &&
-                board[0][i] !== "b") { 
+            else if (board[0][i] === board[1][i] &&
+                board[1][i] === board[2][i] &&
+                !checkIfBlank(0, i)) {
                 return true;
             }
         }
-        //diagonal wins
-        if (board[0][0] === board[1][1] === board[2][2]  &&
-            board[1][1] !== "b") { 
+        //check diagonal wins
+        if (board[0][0] === board[1][1] &&
+            board[1][1] === board[2][2] &&
+            !checkIfBlank(1, 1)) {
             return true;
         }
-        else if (board[0][2] === board[1][1] === board[2][0]  &&
-            board[1][1] !== "b") {
+        else if (board[0][2] === board[1][1] &&
+            board[1][1] === board[2][0] &&
+            !checkIfBlank(1, 1)) {
             return true;
         }
+        
+        return false;
     }
 
     const checkGameOver = function() {
@@ -81,6 +87,7 @@ const gameController = (function() {
     }
 
     const gameBoardDiv = document.querySelector('#game-board');
+    const announcements = document.querySelector('.announcements');
 
     gameBoardDiv.addEventListener('click', (event) => {
         if (event.target.className === 'board-slot') {
@@ -92,9 +99,13 @@ const gameController = (function() {
                 gameBoard.placePiece(row, column, playerTurn);
                 boardSpace.textContent = playerTurn;
                 togglePlayerTurn();
+                if (gameBoard.checkGameWin()) {
+                    announcements.textContent = 'Game won'
+                }
+                else if (gameBoard.checkGameOver()) {
+                    announcements.textContent = 'Tie';
+                }
             }
-
-
         }
     })
 
