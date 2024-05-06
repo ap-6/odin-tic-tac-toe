@@ -47,6 +47,36 @@ const gameBoard = (function () {
         return false;
     }
 
+    const checkWinningPieces = function() {
+        for(let i = 0; i <= 2; i++) { //check each row and column
+            //row win
+            if (board[i][0] === board[i][1] && 
+                board[i][1] === board[i][2] &&
+                !checkIfBlank(i, 0)) { 
+                return true;
+            }
+            //column win
+            else if (board[0][i] === board[1][i] &&
+                board[1][i] === board[2][i] &&
+                !checkIfBlank(0, i)) {
+                return true;
+            }
+        }
+        //check diagonal wins
+        if (board[0][0] === board[1][1] &&
+            board[1][1] === board[2][2] &&
+            !checkIfBlank(1, 1)) {
+            return true;
+        }
+        else if (board[0][2] === board[1][1] &&
+            board[1][1] === board[2][0] &&
+            !checkIfBlank(1, 1)) {
+            return true;
+        }
+        
+        return false;
+    }
+
     const checkGameOver = function() {
         return !(board[0].includes('b') || 
                 board[1].includes('b') || 
@@ -86,39 +116,37 @@ const gameController = (function() {
         playerTurn = 'x';
     }
 
+    return { getRoundCount, incrementRoundCount, 
+        getPlayerTurn, togglePlayerTurn, reset }
+})();
+
+const displayController = (function () {
     const gameBoardDiv = document.querySelector('#game-board');
     const announcements = document.querySelector('.announcements');
 
     const interactGameBoardDiv = (event) => {
         if (event.target.className === 'board-slot') {
-            const boardSpace = event.target;
-            const row = boardSpace.id[0];
-            const column = boardSpace.id[1];
+            const boardSlot = event.target;
+            const row = boardSlot.id[0];
+            const column = boardSlot.id[1];
             
             if (gameBoard.checkIfBlank(row, column)) {
-                gameBoard.placePiece(row, column, playerTurn);
-                boardSpace.textContent = playerTurn;
-                togglePlayerTurn();
+                gameBoard.placePiece(row, column, gameController.getPlayerTurn());
+                boardSlot.textContent = gameController.getPlayerTurn();
+                gameController.togglePlayerTurn();
 
                 if (gameBoard.checkGameWin()) {
                     announcements.textContent = 'Game won'
                     gameBoardDiv.removeEventListener('click', interactGameBoardDiv);
                 }
                 else if (gameBoard.checkGameOver()) {
-                    announcements.textContent = 'Tie';
+                    announcements.textContent = 'Game tied';
                 }
             }
         }
     }
 
     gameBoardDiv.addEventListener('click', interactGameBoardDiv);
-
-    return { getRoundCount, incrementRoundCount, 
-        getPlayerTurn, togglePlayerTurn, reset }
-})();
-
-const displayController = (function () {
-
 })();
 
 function playRound() {
