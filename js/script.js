@@ -47,34 +47,50 @@ const gameBoard = (function () {
         return false;
     }
 
-    const checkWinningPieces = function() {
+    const getWinStats = function() {
+        const winningPieces = [];
+        let winningPlayer = "";
+
         for(let i = 0; i <= 2; i++) { //check each row and column
             //row win
             if (board[i][0] === board[i][1] && 
                 board[i][1] === board[i][2] &&
                 !checkIfBlank(i, 0)) { 
-                return true;
+                winningPieces.push(i + "0");
+                winningPieces.push(i + "1");
+                winningPieces.push(i + "2");
             }
             //column win
-            else if (board[0][i] === board[1][i] &&
+            if (board[0][i] === board[1][i] &&
                 board[1][i] === board[2][i] &&
                 !checkIfBlank(0, i)) {
-                return true;
+                winningPieces.push("0" + i);
+                winningPieces.push("1" + i);
+                winningPieces.push("2" + i);
             }
         }
         //check diagonal wins
         if (board[0][0] === board[1][1] &&
             board[1][1] === board[2][2] &&
             !checkIfBlank(1, 1)) {
-            return true;
+            winningPieces.push("00");
+            winningPieces.push("11");
+            winningPieces.push("22");
         }
-        else if (board[0][2] === board[1][1] &&
+        if (board[0][2] === board[1][1] &&
             board[1][1] === board[2][0] &&
             !checkIfBlank(1, 1)) {
-            return true;
+            winningPieces.push("02");
+            winningPieces.push("11");
+            winningPieces.push("20");
+        }
+
+        //determine winning player
+        if (winningPieces.length > 0) {
+            winningPlayer = board[winningPieces[0][0]][winningPieces[0][1]];
         }
         
-        return false;
+        return { winningPlayer, winningPieces };
     }
 
     const checkGameOver = function() {
@@ -92,7 +108,7 @@ const gameBoard = (function () {
     }
 
     return { getBoard, placePiece, checkGameOver, checkGameWin, 
-        resetGameBoard, checkIfBlank };
+        resetGameBoard, checkIfBlank, getWinStats};
 })();
 
 function createPlayer(playerPiece) {
@@ -138,6 +154,7 @@ const displayController = (function () {
                 if (gameBoard.checkGameWin()) {
                     announcements.textContent = 'Game won'
                     gameBoardDiv.removeEventListener('click', interactGameBoardDiv);
+                    console.log(gameBoard.getWinStats());
                 }
                 else if (gameBoard.checkGameOver()) {
                     announcements.textContent = 'Game tied';
