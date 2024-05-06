@@ -89,7 +89,7 @@ const gameController = (function() {
     const gameBoardDiv = document.querySelector('#game-board');
     const announcements = document.querySelector('.announcements');
 
-    gameBoardDiv.addEventListener('click', (event) => {
+    const interactGameBoardDiv = (event) => {
         if (event.target.className === 'board-slot') {
             const boardSpace = event.target;
             const row = boardSpace.id[0];
@@ -99,15 +99,19 @@ const gameController = (function() {
                 gameBoard.placePiece(row, column, playerTurn);
                 boardSpace.textContent = playerTurn;
                 togglePlayerTurn();
+
                 if (gameBoard.checkGameWin()) {
                     announcements.textContent = 'Game won'
+                    gameBoardDiv.removeEventListener('click', interactGameBoardDiv);
                 }
                 else if (gameBoard.checkGameOver()) {
                     announcements.textContent = 'Tie';
                 }
             }
         }
-    })
+    }
+
+    gameBoardDiv.addEventListener('click', interactGameBoardDiv);
 
     return { getRoundCount, incrementRoundCount, 
         getPlayerTurn, togglePlayerTurn, reset }
