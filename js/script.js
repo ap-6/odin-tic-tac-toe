@@ -120,6 +120,10 @@ function createPlayer(playerPiece) {
 const gameController = (function() {
     let roundCount = 1;
     let playerTurn = 'x';
+    const score = { 
+        playerOne: 0,
+        playerTwo: 0
+    }
 
     const getRoundCount = () => roundCount;
     const incrementRoundCount = () => roundCount++;
@@ -142,19 +146,34 @@ const displayController = (function () {
 
     const styleWinningSlots = function () {
         const winningSlotIds = gameBoard.getWinStats().winningSlotIds;
+        for (let i = 0; i < winningSlotIds.length; i++) {
+            const winningRow = winningSlotIds[i][0];
+            const winningColumn = winningSlotIds[i][1];
+            const winningSlotDiv = getDivSlotReference(winningRow, winningColumn);
+            
+            if (gameController.getPlayerTurn() === 'x') {
+                winningSlotDiv.classList.add('winning-slot-one');
+                winningSlotDiv.classList.remove('player-one');
+            }
+            else {
+                winningSlotDiv.classList.add('winning-slot-two');
+                winningSlotDiv.classList.remove('player-two');
+            }
+            winningSlotDiv.classList.remove('board-slot');
+        }
+    }
+
+    const getDivSlotReference = function (row, column) {
+        slotId = row + '' + column;
         for (let i = 0; i < gameBoardDiv.children.length; i++) {
-            let boardSlotDiv = gameBoardDiv.children[i];
-            if (winningSlotIds.includes(boardSlotDiv.id)) {
-                boardSlotDiv.classList.add("winning-slot");
-                boardSlotDiv.classList.remove("board-slot");
-                
+            if (gameBoardDiv.children[i].id === slotId) {
+                return gameBoardDiv.children[i];
             }
         }
     }
 
     const interactGameBoardDiv = (event) => {
         if (event.target.classList.contains('board-slot')) {
-            console.log("hello");
             const boardSlot = event.target;
             const row = boardSlot.id[0];
             const column = boardSlot.id[1];
@@ -162,7 +181,10 @@ const displayController = (function () {
             if (gameBoard.checkIfBlank(row, column)) {
                 gameBoard.setSlot(row, column, gameController.getPlayerTurn());
                 boardSlot.textContent = gameBoard.getSlot(row, column);
-                gameController.togglePlayerTurn();
+                if (gameController.getPlayerTurn() == 'x') {
+                    boardSlot.classList.add('player-one');
+                }
+                else boardSlot.classList.add('player-two');
 
                 if (gameBoard.checkGameWin()) {
                     announcements.textContent = 'Game won'
@@ -172,6 +194,8 @@ const displayController = (function () {
                 else if (gameBoard.checkGameOver()) {
                     announcements.textContent = 'Game tied';
                 }
+
+                gameController.togglePlayerTurn();
             }
         }
     }

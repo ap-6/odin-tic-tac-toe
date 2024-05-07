@@ -1,5 +1,12 @@
 :root {
     --corner-radius: 10px;
+    --background-color: rgb(22 22 24);
+    --game-board-color: rgb(54, 54, 54);
+    --slot-border-color: rgb(0, 0, 0);
+    --slot-color: rgb(22, 22, 22);
+    --slot-hover-color: rgb(54, 54, 54);
+    --player-one-color: rgb(0, 189, 25);
+    --player-two-color: rgb(240, 168, 13);
 }
 
 body, 
@@ -8,6 +15,7 @@ html {
     height: 100%;
     font-family: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
     font-size: 30px;
+    color: white;
 }
 
 body {
@@ -16,14 +24,14 @@ body {
     justify-content: center;
     align-items: center;
     gap: 20px;
-    background-color: rgb(12, 12, 12);
+    background-color: var(--background-color);
 }
 
 #game-board {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    background-color: rgb(54, 54, 54);
+    background-color: var(--game-board-color);
     gap: 5px;
 
     width: 300px;
@@ -32,23 +40,24 @@ body {
     border-radius: var(--corner-radius, 10px);
 }
 
-.winning-slot,
+.winning-slot-one,
+.winning-slot-two,
 .board-slot {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 50px;
     border-radius: 0px;
-    border: 2px solid black;
+    border: 2px solid var(--slot-border-color);
 }
 
 .board-slot {
-    background-color: white;
+    background-color: var(--slot-color);
     transition: background-color 0.2s ease; 
 }
 
 .board-slot:hover {
-    background-color: rgb(167, 167, 167);
+    background-color: var(--slot-hover-color);
     transition: background-color 0.2s ease; 
 }
 
@@ -56,9 +65,20 @@ body {
     color: white;
 }
 
-.winning-slot {
-    background-color: rgb(0, 104, 0);
+.winning-slot-one {
+    background-color: var(--player-one-color);
+    color: rgb(31, 31, 31);
+}
+
+.winning-slot-two {
+    background-color: var(--player-two-color);
+    color: rgb(31, 31, 31);
+}
+
+.winning-slot-one, 
+.winning-slot-two {
     transition: background-color 0.4s ease; 
+    
 }
 
 .top-left-corner {
@@ -75,4 +95,22 @@ body {
 
 .bottom-right-corner {
     border-radius: 0px 0px var(--corner-radius, 10px) 0px;
+}
+
+.restart-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+}
+
+.restart-btn:hover {
+    background-color: rgb(182, 182, 182);
+}
+
+.player-one {
+    color: var(--player-one-color);
+}
+
+.player-two {
+    color: var(--player-two-color);
 }
