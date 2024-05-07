@@ -1,3 +1,7 @@
+:root {
+    --corner-radius: 10px;
+}
+
 body, 
 html {
     width: 100%;
@@ -24,7 +28,8 @@ body {
 
     width: 300px;
     height: 300px;
-    padding: 20px;
+    padding: 10px;
+    border-radius: var(--corner-radius, 10px);
 }
 
 .winning-slot,
@@ -33,6 +38,8 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 50px;
+    border-radius: 0px;
+    border: 2px solid black;
 }
 
 .board-slot {
@@ -52,4 +59,20 @@ body {
 .winning-slot {
     background-color: rgb(0, 104, 0);
     transition: background-color 0.4s ease; 
+}
+
+.top-left-corner {
+    border-radius: var(--corner-radius, 10px) 0px 0px 0px;
+}
+
+.top-right-corner {
+    border-radius: 0px var(--corner-radius, 10px) 0px 0px;
+}
+
+.bottom-left-corner {
+    border-radius: 0px 0px 0px var(--corner-radius, 10px);
+}
+
+.bottom-right-corner {
+    border-radius: 0px 0px var(--corner-radius, 10px) 0px;
 }

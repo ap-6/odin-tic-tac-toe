@@ -153,7 +153,8 @@ const displayController = (function () {
     }
 
     const interactGameBoardDiv = (event) => {
-        if (event.target.className === 'board-slot') {
+        if (event.target.classList.contains('board-slot')) {
+            console.log("hello");
             const boardSlot = event.target;
             const row = boardSlot.id[0];
             const column = boardSlot.id[1];
