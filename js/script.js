@@ -5,16 +5,16 @@ const gameBoard = (function () {
         ['b', 'b', 'b']  //row 2
     ]; //'b' for blank
 
-    const getBoard = function() {
-        return board;
-    }
-
     const checkIfBlank = function (row, column) {
         return board[row][column] === 'b';
     } 
 
-    const placePiece = function(row, column, playerTurn) {
+    const setSlot = function(row, column, playerTurn) {
         board[row][column] = playerTurn;
+    }
+
+    const getSlot = function(row, column) {
+        return board[row][column];
     }
 
     const checkGameWin = function() {
@@ -107,8 +107,8 @@ const gameBoard = (function () {
         ]; 
     }
 
-    return { getBoard, placePiece, checkGameOver, checkGameWin, 
-        resetGameBoard, checkIfBlank, getWinStats};
+    return { setSlot, getSlot, checkGameOver, checkGameWin, 
+        resetGameBoard, checkIfBlank, getWinStats };
 })();
 
 function createPlayer(playerPiece) {
@@ -146,6 +146,8 @@ const displayController = (function () {
             let boardSlotDiv = gameBoardDiv.children[i];
             if (winningSlotIds.includes(boardSlotDiv.id)) {
                 boardSlotDiv.classList.add("winning-slot");
+                boardSlotDiv.classList.remove("board-slot");
+                
             }
         }
     }
@@ -157,8 +159,8 @@ const displayController = (function () {
             const column = boardSlot.id[1];
             
             if (gameBoard.checkIfBlank(row, column)) {
-                gameBoard.placePiece(row, column, gameController.getPlayerTurn());
-                boardSlot.textContent = gameController.getPlayerTurn();
+                gameBoard.setSlot(row, column, gameController.getPlayerTurn());
+                boardSlot.textContent = gameBoard.getSlot(row, column);
                 gameController.togglePlayerTurn();
 
                 if (gameBoard.checkGameWin()) {
@@ -176,13 +178,3 @@ const displayController = (function () {
     gameBoardDiv.addEventListener('click', interactGameBoardDiv);
 })();
 
-function playRound() {
-
-}
-
-function playGame() {
-    let player1 = createPlayer('x');
-    let player2 = createPlayer('o');
-
-    console.log( gameBoard.getBoard() );
-}
