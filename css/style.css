@@ -33,6 +33,7 @@ body {
     grid-template-rows: repeat(3, 1fr);
     background-color: var(--game-board-color);
     gap: 5px;
+    border: 2px solid black;
 
     width: 300px;
     height: 300px;

@@ -143,6 +143,7 @@ const gameController = (function() {
 const displayController = (function () {
     const gameBoardDiv = document.querySelector('#game-board');
     const announcements = document.querySelector('.announcements');
+    const restartBtn = document.querySelector('#restart-btn');
 
     const styleWinningSlots = function () {
         const winningSlotIds = gameBoard.getWinStats().winningSlotIds;
@@ -181,11 +182,12 @@ const displayController = (function () {
             if (gameBoard.checkIfBlank(row, column)) {
                 gameBoard.setSlot(row, column, gameController.getPlayerTurn());
                 boardSlot.textContent = gameBoard.getSlot(row, column);
+                //style slot according to turn
                 if (gameController.getPlayerTurn() == 'x') {
                     boardSlot.classList.add('player-one');
                 }
                 else boardSlot.classList.add('player-two');
-
+                //end game checks
                 if (gameBoard.checkGameWin()) {
                     announcements.textContent = 'Game won'
                     gameBoardDiv.removeEventListener('click', interactGameBoardDiv);
@@ -201,5 +203,8 @@ const displayController = (function () {
     }
 
     gameBoardDiv.addEventListener('click', interactGameBoardDiv);
+
+    //restartBtn.addEventListener('click', gameBoard.resetGameBoard());
+
 })();
 
