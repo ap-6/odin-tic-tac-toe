@@ -48,7 +48,7 @@ const gameBoard = (function () {
     }
 
     const getWinStats = function() {
-        const winningPieces = [];
+        const winningSlotIds = [];
         let winningPlayer = "";
 
         for(let i = 0; i <= 2; i++) { //check each row and column
@@ -56,41 +56,41 @@ const gameBoard = (function () {
             if (board[i][0] === board[i][1] && 
                 board[i][1] === board[i][2] &&
                 !checkIfBlank(i, 0)) { 
-                winningPieces.push(i + "0");
-                winningPieces.push(i + "1");
-                winningPieces.push(i + "2");
+                winningSlotIds.push(i + "0");
+                winningSlotIds.push(i + "1");
+                winningSlotIds.push(i + "2");
             }
             //column win
             if (board[0][i] === board[1][i] &&
                 board[1][i] === board[2][i] &&
                 !checkIfBlank(0, i)) {
-                winningPieces.push("0" + i);
-                winningPieces.push("1" + i);
-                winningPieces.push("2" + i);
+                winningSlotIds.push("0" + i);
+                winningSlotIds.push("1" + i);
+                winningSlotIds.push("2" + i);
             }
         }
         //check diagonal wins
         if (board[0][0] === board[1][1] &&
             board[1][1] === board[2][2] &&
             !checkIfBlank(1, 1)) {
-            winningPieces.push("00");
-            winningPieces.push("11");
-            winningPieces.push("22");
+            winningSlotIds.push("00");
+            winningSlotIds.push("11");
+            winningSlotIds.push("22");
         }
         if (board[0][2] === board[1][1] &&
             board[1][1] === board[2][0] &&
             !checkIfBlank(1, 1)) {
-            winningPieces.push("02");
-            winningPieces.push("11");
-            winningPieces.push("20");
+            winningSlotIds.push("02");
+            winningSlotIds.push("11");
+            winningSlotIds.push("20");
         }
 
         //determine winning player
-        if (winningPieces.length > 0) {
-            winningPlayer = board[winningPieces[0][0]][winningPieces[0][1]];
+        if (winningSlotIds.length > 0) {
+            winningPlayer = board[winningSlotIds[0][0]][winningSlotIds[0][1]];
         }
         
-        return { winningPlayer, winningPieces };
+        return { winningPlayer, winningSlotIds };
     }
 
     const checkGameOver = function() {
@@ -140,6 +140,16 @@ const displayController = (function () {
     const gameBoardDiv = document.querySelector('#game-board');
     const announcements = document.querySelector('.announcements');
 
+    const styleWinningSlots = function () {
+        const winningSlotIds = gameBoard.getWinStats().winningSlotIds;
+        for (let i = 0; i < gameBoardDiv.children.length; i++) {
+            let boardSlotDiv = gameBoardDiv.children[i];
+            if (winningSlotIds.includes(boardSlotDiv.id)) {
+                boardSlotDiv.classList.add("winning-slot");
+            }
+        }
+    }
+
     const interactGameBoardDiv = (event) => {
         if (event.target.className === 'board-slot') {
             const boardSlot = event.target;
@@ -154,7 +164,7 @@ const displayController = (function () {
                 if (gameBoard.checkGameWin()) {
                     announcements.textContent = 'Game won'
                     gameBoardDiv.removeEventListener('click', interactGameBoardDiv);
-                    console.log(gameBoard.getWinStats());
+                    styleWinningSlots();
                 }
                 else if (gameBoard.checkGameOver()) {
                     announcements.textContent = 'Game tied';
