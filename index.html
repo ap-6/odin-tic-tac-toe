@@ -9,20 +9,23 @@
     <script src='./js/script.js' defer></script>
 </head>
 <body>
-
-    <div id='game-board'>
-        <div class='board-slot top-left-corner' id='00'></div>
-        <div class='board-slot' id='01'></div>
-        <div class='board-slot top-right-corner' id='02'></div>
-        <div class='board-slot' id='10'></div>
-        <div class='board-slot' id='11'></div>
-        <div class='board-slot' id='12'></div>
-        <div class='board-slot bottom-left-corner' id='20'></div>
-        <div class='board-slot' id='21'></div>
-        <div class='board-slot bottom-right-corner' id='22'></div>
-    </div>
-
-    <div class='announcements'></div>
-    <button id='restart-btn' class='restart-btn'>Clear board</button>
+    <header>
+        <div class='rounded-font text-size1 '>Tic Tac Toe</div>
+    </header>
+    <main class='game-container'>
+        <div class='announcements'></div>
+        <div id='game-board' class='rounded-font'>
+            <div class='board-slot top-left-corner' id='00'></div>
+            <div class='board-slot' id='01'></div>
+            <div class='board-slot top-right-corner' id='02'></div>
+            <div class='board-slot' id='10'></div>
+            <div class='board-slot' id='11'></div>
+            <div class='board-slot' id='12'></div>
+            <div class='board-slot bottom-left-corner' id='20'></div>
+            <div class='board-slot' id='21'></div>
+            <div class='board-slot bottom-right-corner' id='22'></div>
+        </div>
+        <button id='restart-btn' class='restart-btn text-size3'>Clear board</button>
+    </main>
 </body>
 </html>
