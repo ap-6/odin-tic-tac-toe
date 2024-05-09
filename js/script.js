@@ -16,6 +16,10 @@ const gameBoard = (function () {
     const getSlot = function(row, column) {
         return board[row][column];
     }
+    
+    const getGameBoard = function() {
+        return board;
+    }
 
     const checkGameWin = function() {
         for(let i = 0; i <= 2; i++) { //check each row and column
@@ -93,22 +97,18 @@ const gameBoard = (function () {
         return { winningPlayer, winningSlotIds };
     }
 
-    const checkGameOver = function() {
+    const checkBoardFull = function() {
         return !(board[0].includes('b') || 
                 board[1].includes('b') || 
                 board[2].includes('b'));
     }
 
     const resetGameBoard = function() {
-        board = [
-            ['b', 'b', 'b'], //row 0
-            ['b', 'b', 'b'], //row 1
-            ['b', 'b', 'b']  //row 2
-        ]; 
+        board.forEach((row, index) => board[index] = ['b', 'b', 'b']);
     }
 
-    return { setSlot, getSlot, checkGameOver, checkGameWin, 
-        resetGameBoard, checkIfBlank, getWinStats };
+    return { setSlot, getSlot, checkBoardFull, checkGameWin, 
+        resetGameBoard, checkIfBlank, getWinStats, getGameBoard };
 })();
 
 function createPlayer(playerPiece) {
@@ -142,6 +142,7 @@ const gameController = (function() {
 
 const displayController = (function () {
     const gameBoardDiv = document.querySelector('#game-board');
+    const emptyGameBoardDiv = gameBoardDiv.cloneNode(true);
     const announcements = document.querySelector('.announcements');
     const restartBtn = document.querySelector('#restart-btn');
 
@@ -175,6 +176,7 @@ const displayController = (function () {
 
     const interactGameBoardDiv = (event) => {
         if (event.target.classList.contains('board-slot')) {
+            
             const boardSlot = event.target;
             const row = boardSlot.id[0];
             const column = boardSlot.id[1];
@@ -193,8 +195,9 @@ const displayController = (function () {
                     gameBoardDiv.removeEventListener('click', interactGameBoardDiv);
                     styleWinningSlots();
                 }
-                else if (gameBoard.checkGameOver()) {
+                else if (gameBoard.checkBoardFull()) {
                     announcements.textContent = 'Game tied';
+                    gameBoardDiv.removeEventListener('click', interactGameBoardDiv);
                 }
 
                 gameController.togglePlayerTurn();
@@ -202,9 +205,30 @@ const displayController = (function () {
         }
     }
 
+    const resetGameBoardDiv = function() {
+        while (gameBoardDiv.firstChild) {
+            gameBoardDiv.removeChild(gameBoardDiv.firstChild);
+        }
+        
+        emptyGameBoardDiv.childNodes.forEach((child) => {
+            gameBoardDiv.appendChild(child.cloneNode(true));
+        })
+       
+    }
+
+    const resetGameDisplay = function() {
+        resetGameBoardDiv();
+        announcements.textContent = '';
+    }
+
     gameBoardDiv.addEventListener('click', interactGameBoardDiv);
 
-    //restartBtn.addEventListener('click', gameBoard.resetGameBoard());
+    restartBtn.addEventListener('click', () => {
+        resetGameDisplay(); 
+        gameController.reset();
+        gameBoard.resetGameBoard();
+        //re-add event listener because it's removed upon game end
+        gameBoardDiv.addEventListener('click', interactGameBoardDiv);
+    });
 
 })();
-
