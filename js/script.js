@@ -204,9 +204,13 @@ const displayController = (function() {
                 boardSlot.textContent = gameBoard.getSlot(row, column);
                 //style slot according to turn
                 if (gameController.getPlayerTurn() == 'x') {
+                    boardSlot.classList.remove('player-one-hover');
                     boardSlot.classList.add('player-one');
                 }
-                else boardSlot.classList.add('player-two');
+                else {
+                    boardSlot.classList.remove('player-two-hover');
+                    boardSlot.classList.add('player-two');
+                }
 
                 //end game checks
                 if (gameBoard.checkGameWin()) {
@@ -223,6 +227,42 @@ const displayController = (function() {
                     setPlayerTurnAnnouncement();
                 }
                 
+            }
+        }
+    }
+
+    const hoverBoardSlot = (event) => {
+        if (event.target.classList.contains('board-slot')) {
+            const boardSlot = event.target;
+            const row = boardSlot.id[0];
+            const column = boardSlot.id[1];
+            
+            if (gameBoard.checkIfBlank(row, column)) {
+                boardSlot.textContent = gameController.getPlayerTurn();
+                if (gameController.getPlayerTurn() == 'x') {
+                    boardSlot.classList.add('player-one-hover');
+                }
+                else {
+                    boardSlot.classList.add('player-two-hover');
+                }
+            }
+        }
+    }
+
+    const unhoverBoardSlot = (event) => {
+        if (event.target.classList.contains('board-slot')) {
+            const boardSlot = event.target;
+            const row = boardSlot.id[0];
+            const column = boardSlot.id[1];
+            
+            if (gameBoard.checkIfBlank(row, column)) {
+                boardSlot.textContent = '';
+                if (gameController.getPlayerTurn() == 'x') {
+                    boardSlot.classList.remove('player-one-hover');
+                }
+                else {
+                    boardSlot.classList.remove('player-two-hover');
+                }
             }
         }
     }
@@ -253,5 +293,8 @@ const displayController = (function() {
         gameBoardDiv.addEventListener('click', interactGameBoardDiv);
         setPlayerTurnAnnouncement();
     });
+
+    gameBoardDiv.addEventListener('mouseover', hoverBoardSlot);
+    gameBoardDiv.addEventListener('mouseout', unhoverBoardSlot);
 
 })();
