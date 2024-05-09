@@ -212,6 +212,8 @@ const displayController = (function() {
                     boardSlot.classList.add('player-two');
                 }
 
+                boardSlot.classList.add('bounce-animation');
+
                 //end game checks
                 if (gameBoard.checkGameWin()) {
                     announcements.textContent = 'Game won'
