@@ -111,18 +111,24 @@ const gameBoard = (function () {
         resetGameBoard, checkIfBlank, getWinStats, getGameBoard };
 })();
 
-function createPlayer(playerPiece) {
+function createPlayer(name) {
+    const getName = function() {
+        return name;
+    }
 
-
-    return { playerPiece }
+    return { getName }
 }
+
+const player1 = createPlayer('x');
+const player2 = createPlayer('o');
 
 const gameController = (function() {
     let roundCount = 1;
     let playerTurn = 'x';
+    
     const score = { 
-        playerOne: 0,
-        playerTwo: 0
+        player1: 0,
+        player2: 0
     }
 
     const getRoundCount = () => roundCount;
@@ -140,13 +146,15 @@ const gameController = (function() {
         getPlayerTurn, togglePlayerTurn, reset }
 })();
 
-const displayController = (function () {
+const displayController = (function() {
     const gameBoardDiv = document.querySelector('#game-board');
     const emptyGameBoardDiv = gameBoardDiv.cloneNode(true);
     const announcements = document.querySelector('.announcements');
     const restartBtn = document.querySelector('#restart-btn');
 
-    const styleWinningSlots = function () {
+    announcements.textContent = player1.getName() + '\'s turn';
+
+    const styleWinningSlots = function() {
         const winningSlotIds = gameBoard.getWinStats().winningSlotIds;
         for (let i = 0; i < winningSlotIds.length; i++) {
             const winningRow = winningSlotIds[i][0];
@@ -165,13 +173,23 @@ const displayController = (function () {
         }
     }
 
-    const getDivSlotReference = function (row, column) {
+    const getDivSlotReference = function(row, column) {
         slotId = row + '' + column;
         for (let i = 0; i < gameBoardDiv.children.length; i++) {
             if (gameBoardDiv.children[i].id === slotId) {
                 return gameBoardDiv.children[i];
             }
         }
+    }
+
+    const setPlayerTurnAnnouncement = function() {
+        if (gameController.getPlayerTurn() == "x") {
+            announcements.textContent = player1.getName() + '\'s turn';
+        }
+        else {
+            announcements.textContent = player2.getName() + '\'s turn';
+        }
+        
     }
 
     const interactGameBoardDiv = (event) => {
@@ -189,6 +207,7 @@ const displayController = (function () {
                     boardSlot.classList.add('player-one');
                 }
                 else boardSlot.classList.add('player-two');
+
                 //end game checks
                 if (gameBoard.checkGameWin()) {
                     announcements.textContent = 'Game won'
@@ -199,8 +218,11 @@ const displayController = (function () {
                     announcements.textContent = 'Game tied';
                     gameBoardDiv.removeEventListener('click', interactGameBoardDiv);
                 }
-
-                gameController.togglePlayerTurn();
+                else { 
+                    gameController.togglePlayerTurn();
+                    setPlayerTurnAnnouncement();
+                }
+                
             }
         }
     }
@@ -229,6 +251,7 @@ const displayController = (function () {
         gameBoard.resetGameBoard();
         //re-add event listener because it's removed upon game end
         gameBoardDiv.addEventListener('click', interactGameBoardDiv);
+        setPlayerTurnAnnouncement();
     });
 
 })();
