@@ -36,20 +36,28 @@ body {
     border: 2px solid black;
 
     width: 300px;
-    height: 300px;
+    min-height: 300px;
     padding: 10px;
     border-radius: var(--corner-radius, 10px);
+    
+    font-family: ui-rounded, 'Hiragino Maru Gothic ProN', Quicksand, Comfortaa, Manjari, 'Arial Rounded MT', 'Arial Rounded MT Bold', Calibri, source-sans-pro, sans-serif;
+    font-weight: normal;
 }
 
 .winning-slot-one,
 .winning-slot-two,
 .board-slot {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 50px;
     border-radius: 0px;
     border: 2px solid var(--slot-border-color);
+
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+    justify-items: center;
+    align-items: center;
+
+    font-size: 60px;
+    user-select: none;
 }
 
 .board-slot {
