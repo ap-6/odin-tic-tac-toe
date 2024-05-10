@@ -112,15 +112,10 @@ const gameBoard = (function () {
 })();
 
 function createPlayer(name) {
-    const getName = function() {
-        return name;
-    }
+    const getName = () => name;
 
     return { getName }
 }
-
-const player1 = createPlayer('Player X');
-const player2 = createPlayer('Player O');
 
 const gameController = (function() {
     let roundCount = 1;
@@ -163,8 +158,6 @@ const displayController = (function() {
     const restartBtn = document.querySelector('#restart-btn');
     const player1Score = document.querySelector('#player1');
     const player2Score = document.querySelector('#player2');
-
-    announcements.textContent = player1.getName() + '\'s turn';
 
     const styleWinningSlots = function() {
         const winningSlotIds = gameBoard.getWinStats().winningSlotIds;
@@ -214,14 +207,14 @@ const displayController = (function() {
 
     const interactGameBoardDiv = (event) => {
         if (event.target.classList.contains('board-slot')) {
-            
             const boardSlot = event.target;
             const row = boardSlot.id[0];
             const column = boardSlot.id[1];
-            
             if (gameBoard.checkIfBlank(row, column)) {
                 gameBoard.setSlot(row, column, gameController.getPlayerTurn());
                 boardSlot.textContent = gameBoard.getSlot(row, column);
+                //slot styling
+                boardSlot.classList.add('bounce-animation');
                 //style slot according to turn
                 if (gameController.getPlayerTurn() == 'x') {
                     boardSlot.classList.remove('player-one-hover');
@@ -231,9 +224,6 @@ const displayController = (function() {
                     boardSlot.classList.remove('player-two-hover');
                     boardSlot.classList.add('player-two');
                 }
-
-                boardSlot.classList.add('bounce-animation');
-
                 //end game checks
                 if (gameBoard.checkGameWin()) {
                     gameController.incrementScore();
@@ -250,7 +240,6 @@ const displayController = (function() {
                     gameController.togglePlayerTurn();
                     setPlayerTurnAnnouncement();
                 }
-                
             }
         }
     }
@@ -307,17 +296,6 @@ const displayController = (function() {
         announcements.textContent = '';
     }
 
-    gameBoardDiv.addEventListener('click', interactGameBoardDiv);
-
-    restartBtn.addEventListener('click', () => {
-        resetGameDisplay(); 
-        gameController.reset();
-        gameBoard.resetGameBoard();
-        //re-add event listener because it's removed upon game end
-        gameBoardDiv.addEventListener('click', interactGameBoardDiv);
-        setPlayerTurnAnnouncement();
-    });
-
     const setPlayerScore = function() {
         player1Score.children[0].textContent = player1.getName();
         player2Score.children[0].textContent = player2.getName();
@@ -331,10 +309,24 @@ const displayController = (function() {
         player2Score.children[1].textContent = gameController.getScore().o;
     }
 
+    gameBoardDiv.addEventListener('click', interactGameBoardDiv);
+
+    restartBtn.addEventListener('click', () => {
+        resetGameDisplay(); 
+        gameController.reset();
+        gameBoard.resetGameBoard();
+        //re-add event listener because it's removed upon game end
+        gameBoardDiv.addEventListener('click', interactGameBoardDiv);
+        setPlayerTurnAnnouncement();
+    });
+
     gameBoardDiv.addEventListener('mouseover', hoverBoardSlot);
     gameBoardDiv.addEventListener('mouseout', unhoverBoardSlot);
 
-    return { setPlayerScore, updatePlayerScore }
+    return { setPlayerScore, updatePlayerScore, setPlayerTurnAnnouncement }
 })();
 
+const player1 = createPlayer('Player X');
+const player2 = createPlayer('Player O');
+displayController.setPlayerTurnAnnouncement();
 displayController.setPlayerScore();
