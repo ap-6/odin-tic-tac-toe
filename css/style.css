@@ -1,11 +1,8 @@
 :root {
-    --corner-radius: 10px;
-    --background-color: rgb(22 22 24);
-    --game-board-color: rgb(54, 54, 54);
-    --header-color: rgb(54, 54, 54);
-    --slot-border-color: rgb(0, 0, 0);
-    --slot-color: rgb(22, 22, 22);
-    --slot-hover-color: rgb(54, 54, 54);
+    --neutral-900: rgb(22 22 24);
+    --neutral-750: rgb(54, 54, 54);
+    --neutral-1000: rgb(0, 0, 0);
+
     --player-one-color: rgb(0, 189, 25);
     --player-two-color: rgb(240, 168, 13);
     --player-one-color-transparent: rgba(0, 189, 25, 0.3);
@@ -14,6 +11,13 @@
     --font-size1: 60px;
     --font-size2: 40px;
     --font-size3: 20px;
+
+    --corner-radius: 10px;
+
+    /* --neutral-600: rgb(82, 82, 82);
+    --neutral-700: rgb(64, 64, 64);
+    --neutral-800: rgb(38, 38, 38);
+    --neutral-950: rgb(10, 10, 10); */
 }
 
 body, 
@@ -23,14 +27,12 @@ html {
     font-size: var(--font-size2);
     color: white;
     
-    font-family: ui-rounded, 'Hiragino Maru Gothic ProN', Quicksand, 
-    Comfortaa, Manjari, 'Arial Rounded MT', 'Arial Rounded MT Bold', 
-    Calibri, source-sans-pro, sans-serif;
+    font-family: ui-rounded, 'Hiragino Maru Gothic ProN', Quicksand, Comfortaa, Manjari, 'Arial Rounded MT', 'Arial Rounded MT Bold', Calibri, source-sans-pro, sans-serif;
     font-weight: normal;
 }
 
 body {
-    background-color: var(--background-color);
+    background-color: var(--neutral-900);
 
     display: flex;
     flex-direction: column;
@@ -43,7 +45,7 @@ body {
 }
 
 .header {
-    background-color: var(--header-color);
+    background-color: var(--neutral-750);
 }
 
 .game-container {
@@ -71,7 +73,7 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    background-color: var(--game-board-color);
+    background-color: var(--neutral-750);
     gap: 5px;
     border: 2px solid black;
 
@@ -79,13 +81,16 @@ body {
     min-height: 300px;
     padding: 10px;
     border-radius: var(--corner-radius, 10px);
+
+    -webkit-box-shadow: 0px 0px 14px 7px rgba(0,0,0,0.31); 
+    box-shadow: 0px 0px 14px 7px rgba(0,0,0,0.31);
 }
 
 .winning-slot-one,
 .winning-slot-two,
 .board-slot {
     border-radius: 0px;
-    border: 2px solid var(--slot-border-color);
+    border: 2px solid var(--neutral-1000);
 
     display: grid;
     grid-template-rows: 100%;
@@ -98,12 +103,12 @@ body {
 }
 
 .board-slot {
-    background-color: var(--slot-color);
+    background-color: var(--neutral-900);
     transition: background-color 0.2s ease; 
 }
 
 .board-slot:hover {
-    background-color: var(--slot-hover-color);
+    background-color: var(--neutral-750);
     transition: background-color 0.2s ease; 
 }
 
@@ -175,14 +180,14 @@ button {
     color: var(--player-two-color-transparent);
 }
 
-@keyframes pulseAnimation {
+@keyframes bounceAnimation {
     0% { transform: scale(1); }
     50% { transform: scale(0.90); }
     100% { transform: scale(1); }
 }
 
 .bounce-animation {
-    animation: pulseAnimation 0.3s ease;
+    animation: bounceAnimation 0.3s ease;
 }
 
 #score div {
@@ -206,4 +211,10 @@ button {
 #player2 {
     border-radius: 10px;
     padding: 10px 20px;
+    -webkit-box-shadow: 2px 5px 4px 1px rgba(0,0,0,0.21); 
+    box-shadow: 2px 5px 4px 1px rgba(0,0,0,0.21);
+}
+
+#player1 :first-child {
+
 }

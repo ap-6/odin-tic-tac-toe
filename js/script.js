@@ -119,8 +119,8 @@ function createPlayer(name) {
     return { getName }
 }
 
-const player1 = createPlayer('Player 1');
-const player2 = createPlayer('Player 2');
+const player1 = createPlayer('Player X');
+const player2 = createPlayer('Player O');
 
 const gameController = (function() {
     let roundCount = 1;
