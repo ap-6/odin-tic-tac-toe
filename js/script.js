@@ -201,7 +201,15 @@ const displayController = (function() {
         else {
             announcements.textContent = player2.getName() + '\'s turn';
         }
-        
+    }
+
+    const setPlayerWinAnnouncement = function() {
+        if (gameController.getPlayerTurn() == "x") {
+            announcements.textContent = player1.getName() + ' wins';
+        }
+        else {
+            announcements.textContent = player2.getName() + ' wins';
+        }
     }
 
     const interactGameBoardDiv = (event) => {
@@ -230,7 +238,7 @@ const displayController = (function() {
                 if (gameBoard.checkGameWin()) {
                     gameController.incrementScore();
                     updatePlayerScore();
-                    announcements.textContent = 'Game won';
+                    setPlayerWinAnnouncement();
                     gameBoardDiv.removeEventListener('click', interactGameBoardDiv);
                     styleWinningSlots();
                 }
