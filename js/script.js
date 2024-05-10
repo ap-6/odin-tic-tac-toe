@@ -119,16 +119,25 @@ function createPlayer(name) {
     return { getName }
 }
 
-const player1 = createPlayer('x');
-const player2 = createPlayer('o');
+const player1 = createPlayer('Player 1');
+const player2 = createPlayer('Player 2');
 
 const gameController = (function() {
     let roundCount = 1;
     let playerTurn = 'x';
     
     const score = { 
-        player1: 0,
-        player2: 0
+        x: 0,
+        o: 0
+    }
+
+    const getScore = function() {
+        return score;
+    }
+
+    const incrementScore = function() {
+        if (getPlayerTurn() == 'x') score.x++;
+        else score.o++;
     }
 
     const getRoundCount = () => roundCount;
@@ -143,7 +152,8 @@ const gameController = (function() {
     }
 
     return { getRoundCount, incrementRoundCount, 
-        getPlayerTurn, togglePlayerTurn, reset }
+        getPlayerTurn, togglePlayerTurn, reset, getScore, 
+        incrementScore }
 })();
 
 const displayController = (function() {
@@ -151,6 +161,8 @@ const displayController = (function() {
     const emptyGameBoardDiv = gameBoardDiv.cloneNode(true);
     const announcements = document.querySelector('.announcements');
     const restartBtn = document.querySelector('#restart-btn');
+    const player1Score = document.querySelector('#player1');
+    const player2Score = document.querySelector('#player2');
 
     announcements.textContent = player1.getName() + '\'s turn';
 
@@ -216,7 +228,9 @@ const displayController = (function() {
 
                 //end game checks
                 if (gameBoard.checkGameWin()) {
-                    announcements.textContent = 'Game won'
+                    gameController.incrementScore();
+                    updatePlayerScore();
+                    announcements.textContent = 'Game won';
                     gameBoardDiv.removeEventListener('click', interactGameBoardDiv);
                     styleWinningSlots();
                 }
@@ -296,7 +310,23 @@ const displayController = (function() {
         setPlayerTurnAnnouncement();
     });
 
+    const setPlayerScore = function() {
+        player1Score.children[0].textContent = player1.getName();
+        player2Score.children[0].textContent = player2.getName();
+
+        player1Score.children[1].textContent = gameController.getScore().x;
+        player2Score.children[1].textContent = gameController.getScore().o;
+    }
+
+    const updatePlayerScore = function() {
+        player1Score.children[1].textContent = gameController.getScore().x;
+        player2Score.children[1].textContent = gameController.getScore().o;
+    }
+
     gameBoardDiv.addEventListener('mouseover', hoverBoardSlot);
     gameBoardDiv.addEventListener('mouseout', unhoverBoardSlot);
 
+    return { setPlayerScore, updatePlayerScore }
 })();
+
+displayController.setPlayerScore();

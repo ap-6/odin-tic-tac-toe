@@ -185,3 +185,25 @@ button {
     animation: pulseAnimation 0.3s ease;
 }
 
+#score div {
+    text-align: center;
+}
+
+#score {
+    display: flex;
+    gap: 20px;
+}
+
+#player1 {
+    background-color: var(--player-one-color);
+}
+
+#player2 {
+    background-color: var(--player-two-color);
+}
+
+#player1, 
+#player2 {
+    border-radius: 10px;
+    padding: 10px 20px;
+}
